@@ -101,7 +101,7 @@ export function Hero() {
       id="top"
       ref={ref}
       data-hero="dark"
-      className="relative min-h-[100svh] w-full overflow-hidden bg-espresso text-cream pt-28 pb-32 md:pt-32 md:pb-40 grain"
+      className="relative w-full overflow-hidden bg-espresso text-cream pt-28 pb-14 md:min-h-[100svh] md:pt-32 md:pb-40 grain"
     >
       {/* Decorative bean scatter */}
       <motion.div style={{ y: beanY }}>
@@ -179,23 +179,24 @@ export function Hero() {
             style={{ fontSize: 'clamp(72px, 17vw, 248px)' }}
           >
             <span className="block">
-              <RevealText text="DAILY" stagger={0.08} delay={0.3} />
+              <RevealText text="DAILY" stagger={0.08} delay={0.3} immediate />
             </span>
             <span className="block text-terracotta-400">
-              <RevealText text="RITUAL." stagger={0.08} delay={0.55} />
+              <RevealText text="RITUAL." stagger={0.08} delay={0.55} immediate />
             </span>
           </h1>
         </motion.div>
 
         {/* Three cups stage — centered, layered behind the bottom of headline */}
-        <div className="relative mt-6 md:mt-2 lg:-mt-6">
-          <div className="flex items-end justify-center gap-2 sm:gap-4 md:gap-6">
+        <div className="relative mt-12 sm:mt-10 md:mt-2 lg:-mt-6">
+          <div className="flex items-end justify-center gap-3 sm:gap-4 md:gap-6">
             {featured.map((p, i) => {
-              const positions = ['mb-10 md:mb-16', 'mb-0', 'mb-14 md:mb-20']
+              // Even baseline on mobile; staggered rise only kicks in at md+
+              const positions = ['md:mb-16', 'md:mb-0', 'md:mb-20']
               const sizes = [
-                'w-[30%] sm:w-[26%] md:w-[260px] lg:w-[300px]',
-                'w-[34%] sm:w-[30%] md:w-[300px] lg:w-[340px] z-10',
-                'w-[30%] sm:w-[26%] md:w-[260px] lg:w-[300px]',
+                'w-[30%] sm:w-[27%] md:w-[260px] lg:w-[300px]',
+                'w-[32%] sm:w-[29%] md:w-[300px] lg:w-[340px] z-10',
+                'w-[30%] sm:w-[27%] md:w-[260px] lg:w-[300px]',
               ]
               return (
                 <motion.div
@@ -208,9 +209,9 @@ export function Hero() {
                     ease,
                     delay: 0.85 + i * 0.12,
                   }}
-                  className={`relative ${positions[i]} ${sizes[i]} aspect-[3/4]`}
+                  className={`relative ${positions[i]} ${sizes[i]} aspect-[4/5] md:aspect-[3/4]`}
                 >
-                  <div className="absolute inset-0 overflow-hidden rounded-[28px] md:rounded-[40px] shadow-[0_30px_80px_-30px_rgba(0,0,0,0.6)] ring-1 ring-cream/10">
+                  <div className="absolute inset-0 overflow-hidden rounded-2xl md:rounded-[40px] shadow-[0_20px_50px_-20px_rgba(0,0,0,0.55)] md:shadow-[0_30px_80px_-30px_rgba(0,0,0,0.6)] ring-1 ring-cream/10">
                     <motion.img
                       src={p.image}
                       alt={p.name}
@@ -222,22 +223,22 @@ export function Hero() {
                     <div className="absolute inset-0 bg-gradient-to-t from-espresso/80 via-espresso/0 to-espresso/0" />
 
                     {/* Top index */}
-                    <div className="absolute left-3 top-3 md:left-4 md:top-4">
-                      <span className="rounded-full bg-cream/10 px-2.5 py-1 font-mono text-[9px] uppercase tracking-[0.22em] text-cream/80 ring-1 ring-cream/15 backdrop-blur-sm">
+                    <div className="absolute left-2 top-2 md:left-4 md:top-4">
+                      <span className="rounded-full bg-cream/10 px-2 py-0.5 font-mono text-[8px] uppercase tracking-[0.18em] text-cream/80 ring-1 ring-cream/15 backdrop-blur-sm md:px-2.5 md:py-1 md:text-[9px] md:tracking-[0.22em]">
                         № {p.n}
                       </span>
                     </div>
 
                     {/* Bottom label */}
-                    <div className="absolute inset-x-0 bottom-0 px-4 pb-4 md:px-5 md:pb-5">
-                      <div className="font-mono text-[9px] uppercase tracking-[0.22em] text-cream/60">
+                    <div className="absolute inset-x-0 bottom-0 px-2.5 pb-2.5 md:px-5 md:pb-5">
+                      <div className="hidden md:block font-mono text-[9px] uppercase tracking-[0.22em] text-cream/60">
                         {p.origin.split('·')[0]?.trim()}
                       </div>
-                      <div className="mt-0.5 flex items-baseline justify-between gap-2">
-                        <span className="font-display text-lg md:text-2xl leading-none tracking-tightest text-cream">
+                      <div className="mt-0.5 flex items-baseline justify-between gap-1">
+                        <span className="font-display text-[13px] sm:text-base md:text-2xl leading-tight tracking-tightest text-cream">
                           {p.name}
                         </span>
-                        <span className="font-mono text-[10px] nums text-cream/70">
+                        <span className="hidden sm:inline font-mono text-[10px] nums text-cream/70">
                           ${p.price}
                         </span>
                       </div>
@@ -249,40 +250,40 @@ export function Hero() {
           </div>
         </div>
 
-        {/* Floating cards */}
-        <div className="pointer-events-none absolute inset-x-6 -bottom-6 z-30 md:inset-x-10 md:bottom-2 lg:bottom-6">
-          <div className="flex items-end justify-between gap-4">
+        {/* Floating cards — inline on mobile (below cups), absolute on md+ */}
+        <div className="relative mt-8 z-30 sm:mt-10 md:pointer-events-none md:absolute md:inset-x-10 md:bottom-2 md:mt-0 lg:bottom-6">
+          <div className="flex items-end justify-between gap-3 sm:gap-4">
             {/* Top rated card */}
             <motion.div
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1.6, duration: 1, ease }}
-              className="pointer-events-auto w-[48%] max-w-[360px] rounded-2xl bg-terracotta-400 p-5 text-espresso shadow-[0_30px_60px_-20px_rgba(0,0,0,0.45)] md:rounded-[28px] md:p-7"
+              className="pointer-events-auto w-[58%] max-w-[360px] rounded-2xl bg-terracotta-400 p-4 text-espresso shadow-[0_20px_50px_-20px_rgba(0,0,0,0.45)] sm:w-[48%] sm:p-5 md:rounded-[28px] md:p-7"
             >
-              <div className="flex items-center justify-between font-mono text-[10px] uppercase tracking-[0.22em] text-espresso/70">
-                <span className="flex items-center gap-2">
-                  <span className="flex h-6 w-6 items-center justify-center rounded-full bg-espresso/15">
-                    <svg viewBox="0 0 24 24" className="h-3 w-3 fill-espresso">
+              <div className="flex items-center justify-between font-mono text-[9px] uppercase tracking-[0.18em] text-espresso/70 md:text-[10px] md:tracking-[0.22em]">
+                <span className="flex items-center gap-1.5 sm:gap-2">
+                  <span className="flex h-5 w-5 items-center justify-center rounded-full bg-espresso/15 sm:h-6 sm:w-6">
+                    <svg viewBox="0 0 24 24" className="h-2.5 w-2.5 fill-espresso sm:h-3 sm:w-3">
                       <path d="M12 3l2.6 5.6 6.1.7-4.5 4.2 1.2 6L12 16.8 6.6 19.5l1.2-6L3.3 9.3l6.1-.7L12 3z" />
                     </svg>
                   </span>
                   Top rated
                 </span>
-                <span>Spring '26</span>
+                <span className="hidden sm:inline">Spring '26</span>
               </div>
-              <div className="mt-4 flex items-end justify-between">
-                <div className="font-display text-[36px] leading-[0.9] tracking-tightest md:text-[44px]">
+              <div className="mt-3 flex items-end justify-between gap-2 sm:mt-4">
+                <div className="font-display text-[26px] leading-[0.92] tracking-tightest sm:text-[32px] md:text-[44px]">
                   Honey
                   <br />
                   <span className="font-italic italic">latte.</span>
                 </div>
                 <div className="text-right">
-                  <div className="font-mono text-[10px] uppercase tracking-[0.22em] text-espresso/70">
+                  <div className="font-mono text-[9px] uppercase tracking-[0.18em] text-espresso/70 md:text-[10px] md:tracking-[0.22em]">
                     Rating
                   </div>
-                  <div className="mt-1 flex items-center gap-1 font-display text-2xl nums">
+                  <div className="mt-1 flex items-center gap-1 font-display text-lg nums sm:text-xl md:text-2xl">
                     4.9
-                    <svg viewBox="0 0 24 24" className="h-4 w-4 fill-espresso">
+                    <svg viewBox="0 0 24 24" className="h-3 w-3 fill-espresso sm:h-3.5 sm:w-3.5 md:h-4 md:w-4">
                       <path d="M12 3l2.6 5.6 6.1.7-4.5 4.2 1.2 6L12 16.8 6.6 19.5l1.2-6L3.3 9.3l6.1-.7L12 3z" />
                     </svg>
                   </div>
